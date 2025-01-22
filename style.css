@@ -111,7 +111,7 @@ h1 {
     color: #2c3e50;
 }
 
-.cell-content input {
+.cell-content select {
     width: 80%;
     height: 20px;
     font-size: 0.9em;

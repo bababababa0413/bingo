@@ -44,6 +44,8 @@ window.addEventListener('DOMContentLoaded', function () {
         const size = parseInt(document.getElementById('size').value);
         const rangeMin = parseInt(document.getElementById('range-min').value);
         const rangeMax = parseInt(document.getElementById('range-max').value);
+        const participantsElements = document.querySelectorAll('.participant');
+        const participants = Array.from(participantsElements).map(participantsElements => participantsElements.value.trim())
 
         // 入力値チェック
         if (size < 1 || size > 10 || isNaN(size)) {
@@ -66,10 +68,15 @@ window.addEventListener('DOMContentLoaded', function () {
             alert('設定した点数の範囲では、埋めれないセルがあります。');
             return;
         }
+        if(participants.includes('')){
+            alert('参加者を設定してください。');
+            return;
+        }
+        
 
         // ビンゴシート生成
         const table = document.getElementById('bingo');
-        createBingoSheet(table, size, rangeMin, rangeMax);
+        createBingoSheet(table, size, rangeMin, rangeMax, participants);
 
     });
 
@@ -80,7 +87,7 @@ window.addEventListener('DOMContentLoaded', function () {
      * @param {*} min シートの値の下限値
      * @param {*} max シートの値の上限値
      */
-    function createBingoSheet(table, size, min, max) {
+    function createBingoSheet(table, size, min, max, participants) {
         // 既存のシートを削除
         for (let i = table.children.length - 1; i >= 0; i--) {
             table.children[i].remove();
@@ -105,10 +112,23 @@ window.addEventListener('DOMContentLoaded', function () {
                 div.append(span);
 
                 // 空けた名前入力部分
-                const nameInput = document.createElement('input');
-                nameInput.type = 'text';
+                const participantsSelect = document.createElement('select');
+                participantsSelect.class = 'participants-select';
+                
+                const option = document.createElement('option');
+                option.value = '';
+
+                participantsSelect.append(option);
+
+                for(let k = 0; k < participants.length; k++){
+                    const option = document.createElement('option');
+                    option.innerText = participants[k];
+                    option.value = k;
+                    participantsSelect.append(option);
+                }
+
                 // 名前が入力されたら空いたと判定し、背景色を変更
-                nameInput.addEventListener('change', function (e) {
+                participantsSelect.addEventListener('change', function (e) {
                     const input = e.target.value.trim();
 
                     if (input !== '') {
@@ -117,7 +137,7 @@ window.addEventListener('DOMContentLoaded', function () {
                         e.target.parentElement.parentElement.style.backgroundColor = '#f8f9fa';
                     }
                 });
-                div.append(nameInput);
+                div.append(participantsSelect);
 
                 td.append(div);
                 tr.append(td);
