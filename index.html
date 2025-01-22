@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>点数ビンゴ</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <h1>点数ビンゴ</h1>
+    <table id="setting">
+        <tr>
+            <th>
+                サイズ(1~10)：
+            </th>
+            <td>
+                <input type="number" id="size"/>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                点数の範囲(0~100)：
+            </th>
+            <td>
+                <input type="number" id="range-min"/>
+                ~
+                <input type="number" id="range-max"/>
+            </td>
+        </tr>
+    </table>
+    <input type="button" id="create-button" value="生成">
+    <table id="bingo">
+    </table>
+    <script src="script.js"></script>
+</body>
+</html>
