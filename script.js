@@ -1,4 +1,38 @@
 window.addEventListener('DOMContentLoaded', function () {
+    const deleteButtons = document.querySelectorAll('.delete');
+
+    for(let i = 0; i < deleteButtons.length; i++){
+        // 参加者の削除ボタンが押されたときの処理
+        deleteButtons[i].addEventListener('click', function(e){
+            const numberOfButtons = document.querySelectorAll('.delete').length;
+            if(numberOfButtons !== 1){
+                e.target.parentElement.remove();
+            }
+        });
+    }
+
+    const plusButton = document.getElementById('plus');
+
+    // 参加者追加ボタンが押されたときの処理
+    plusButton.addEventListener('click', function(e){
+        e.target.remove();
+
+        const participantsTd = document.getElementById('participants');
+
+        const div = document.querySelector('#participants div').cloneNode(true);
+
+        const button = div.querySelector('.delete');
+        button.addEventListener('click', function(e) {
+            const numberOfButtons = document.querySelectorAll('.delete').length;
+            if(numberOfButtons !== 1){
+                e.target.parentElement.remove();
+            }
+        });
+
+        participantsTd.append(div);
+        participantsTd.append(e.target);
+    })
+
     const createButton = document.getElementById('create-button');
 
     // 生成ボタンが押されたときの処理
