@@ -45,13 +45,12 @@ h1 {
 }
 
 #setting input[type="text"] {
-    width: 150px;
+    width: 110px;
     padding: 5px;
     margin: 5px;
     font-size: 1em;
     border: 1px solid #ccc;
     border-radius: 5px;
-    text-align: center;
 }
 
 #create-button {
