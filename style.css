@@ -38,6 +38,41 @@ h1 {
     text-align: center;
 }
 
+/* ラジオボタンの親要素をスタイル */
+#setting td input[type="radio"] {
+    display: none; /* デフォルトのラジオボタンを非表示 */
+}
+
+/* カスタムラベルのデザイン */
+#setting td label {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 8px 20px;
+    font-size: 1em;
+    color: #333;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+/* ホバー時のスタイル */
+#setting td label:hover {
+    background-color: #e6f7ff;
+    color: #007bff;
+    transform: scale(1.03);
+}
+
+/* ラジオボタンがチェックされた状態のスタイル */
+#setting td input[type="radio"]:checked + label {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #0056b3;
+    font-weight: bold;
+    transform: scale(1.05);
+}
+
 #setting #participants {
     display: flex; 
     flex-direction: column; 
