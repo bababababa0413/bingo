@@ -198,4 +198,3 @@ window.addEventListener('DOMContentLoaded', function () {
         return participantsSelect;
     }
 })
-
