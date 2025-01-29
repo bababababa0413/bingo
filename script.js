@@ -203,7 +203,13 @@ window.addEventListener('DOMContentLoaded', function () {
                 isCompleteBingo = checkBingo(bingoArr, i, j);
 
                 if (isCompleteBingo) {
-                    console.log(isCompleteBingo);
+                    const overlay = document.getElementById("overlay");
+                    overlay.classList.add("show");
+                
+                    // 5秒後にフェードアウト
+                    setTimeout(() => {
+                        overlay.classList.remove("show");
+                    }, 5000);
                 }
             } else {
                 e.target.parentElement.parentElement.style.backgroundColor = '#f8f9fa';
