@@ -88,6 +88,81 @@ h1 {
     border-radius: 5px;
 }
 
+/* 参加者削除ボタンのスタイル */
+#participants > div > button.delete {
+    background-color: #e74c3c; /* 赤い背景 */
+    color: #fff; /* 白い文字 */
+    border: none;
+    border-radius: 50%; /* 丸ボタンにする */
+    width: 25px; /* ボタンの幅 */
+    height: 25px; /* ボタンの高さ */
+    font-size: 1em; /* フォントサイズ */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 立体感を出す影 */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* アニメーション */
+}
+
+/* ホバー時のスタイル */
+#participants > div > button.delete:hover {
+    background-color: #c0392b; /* ホバー時の濃い赤 */
+    transform: scale(1.1); /* 少し大きくする */
+}
+
+/* クリック時のスタイル */
+#participants > div > button.delete:active {
+    background-color: #a93226; /* さらに濃い赤 */
+    transform: scale(0.95); /* 少し縮む */
+}
+
+/* 参加者エントリーの間隔調整 */
+#participants > div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#participants > div input.participant {
+    flex: 1; /* フレックスで幅を調整 */
+    margin-right: 10px; /* ボタンとの間隔 */
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+/* プラスボタンのスタイル */
+#plus {
+    background-color: #2ecc71; /* 緑色の背景 */
+    color: #fff; /* 白い文字 */
+    border: none;
+    border-radius: 50%; /* 丸いボタン */
+    width: 25px; /* ボタンの幅 */
+    height: 25px; /* ボタンの高さ */
+    font-size: 1.5em; /* フォントサイズ */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 立体感を出す影 */
+    margin: 10px 0; /* 上下のマージン */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* アニメーション */
+}
+
+/* プラスボタンのホバー時のスタイル */
+#plus:hover {
+    background-color: #27ae60; /* 濃い緑色 */
+    transform: scale(1.1); /* 少し大きくなる */
+}
+
+/* プラスボタンのクリック時のスタイル */
+#plus:active {
+    background-color: #1e8449; /* さらに濃い緑色 */
+    transform: scale(0.95); /* 少し縮む */
+}
+
 #create-button {
     background-color: #3498db;
     color: #fff;
