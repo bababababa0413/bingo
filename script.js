@@ -21,6 +21,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
         const div = document.querySelector('#participants div').cloneNode(true);
 
+        div.querySelector('.participant').value = '';
         const button = div.querySelector('.delete');
         button.addEventListener('click', function(e) {
             const numberOfButtons = document.querySelectorAll('.delete').length;
@@ -45,7 +46,7 @@ window.addEventListener('DOMContentLoaded', function () {
         const rangeMin = parseInt(document.getElementById('range-min').value);
         const rangeMax = parseInt(document.getElementById('range-max').value);
         const participantsElements = document.querySelectorAll('.participant');
-        const participants = Array.from(participantsElements).map(participantsElements => participantsElements.value.trim())
+        const participants = Array.from(participantsElements).map(participantsElements => participantsElements.value.trim());
 
         // 入力値チェック
         if (size < 1 || size > 10 || isNaN(size)) {
@@ -71,8 +72,7 @@ window.addEventListener('DOMContentLoaded', function () {
         if(participants.includes('')){
             alert('参加者を設定してください。');
             return;
-        }
-        
+        }       
 
         // ビンゴシート生成
         const table = document.getElementById('bingo');
@@ -111,32 +111,8 @@ window.addEventListener('DOMContentLoaded', function () {
                 span.innerText = randomSetIterator.next().value;
                 div.append(span);
 
-                // 空けた名前入力部分
-                const participantsSelect = document.createElement('select');
-                participantsSelect.class = 'participants-select';
-                
-                const option = document.createElement('option');
-                option.value = '';
-
-                participantsSelect.append(option);
-
-                for(let k = 0; k < participants.length; k++){
-                    const option = document.createElement('option');
-                    option.innerText = participants[k];
-                    option.value = k;
-                    participantsSelect.append(option);
-                }
-
-                // 名前が入力されたら空いたと判定し、背景色を変更
-                participantsSelect.addEventListener('change', function (e) {
-                    const input = e.target.value.trim();
-
-                    if (input !== '') {
-                        e.target.parentElement.parentElement.style.backgroundColor = '#F0B9B9';
-                    } else {
-                        e.target.parentElement.parentElement.style.backgroundColor = '#f8f9fa';
-                    }
-                });
+                // あけた名前入力部分を作成
+                const participantsSelect = createParticipantsSelect(participants);
                 div.append(participantsSelect);
 
                 td.append(div);
@@ -164,6 +140,42 @@ window.addEventListener('DOMContentLoaded', function () {
         }
 
         return randomSet;
+    }
+
+    /**     
+     * あけた人の名前入力部分をプルダウンリストで作成する関数
+     * @param {*} participants 参加者の名前が入った配列
+     * @returns あけた人の名前入力を選択するプルダウンリスト
+     */
+    function createParticipantsSelect(participants){
+        // あけた人の名前入力部分
+        const participantsSelect = document.createElement('select');
+        participantsSelect.class = 'participants-select';
+        
+        const option = document.createElement('option');
+        option.value = '';
+
+        participantsSelect.append(option);
+
+        for(let k = 0; k < participants.length; k++){
+            const option = document.createElement('option');
+            option.innerText = participants[k];
+            option.value = k;
+            participantsSelect.append(option);
+        }
+
+        // 名前が入力されたらあいたと判定し、背景色を変更
+        participantsSelect.addEventListener('change', function (e) {
+            const input = e.target.value.trim();
+
+            if (input !== '') {
+                e.target.parentElement.parentElement.style.backgroundColor = '#F0B9B9';
+            } else {
+                e.target.parentElement.parentElement.style.backgroundColor = '#f8f9fa';
+            }
+        });
+
+        return participantsSelect;
     }
 })
 
