@@ -97,6 +97,14 @@ window.addEventListener('DOMContentLoaded', function () {
      * @param {*} max シートの値の上限値
      */
     function createBingoSheet(table, size, min, max, permitDuplicate, participants) {
+        // ビンゴシートの各マスがあけられているかを表す配列
+        // 0→あいてない　1→あいてる
+        const bingoArr = new Array(size);
+        for (let i = 0; i < size; i++) {
+            // 初期値はすべて0
+            bingoArr[i] = new Array(size).fill(0);
+        }
+
         // 既存のシートを削除
         for (let i = table.children.length - 1; i >= 0; i--) {
             table.children[i].remove();
@@ -122,7 +130,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 div.append(span);
 
                 // あけた名前入力部分を作成
-                const participantsSelect = createParticipantsSelect(participants);
+                const participantsSelect = createParticipantsSelect(participants, i, j, bingoArr);
                 div.append(participantsSelect);
 
                 td.append(div);
@@ -167,7 +175,7 @@ window.addEventListener('DOMContentLoaded', function () {
      * @param {*} participants 参加者の名前が入った配列
      * @returns あけた人の名前入力を選択するプルダウンリスト
      */
-    function createParticipantsSelect(participants) {
+    function createParticipantsSelect(participants, i, j, bingoArr) {
         // あけた人の名前入力部分
         const participantsSelect = document.createElement('select');
         participantsSelect.class = 'participants-select';
@@ -190,11 +198,62 @@ window.addEventListener('DOMContentLoaded', function () {
 
             if (input !== '') {
                 e.target.parentElement.parentElement.style.backgroundColor = '#F0B9B9';
+                bingoArr[i][j] = 1;
+
+                isCompleteBingo = checkBingo(bingoArr, i, j);
+
+                if (isCompleteBingo) {
+                    console.log(isCompleteBingo);
+                }
             } else {
                 e.target.parentElement.parentElement.style.backgroundColor = '#f8f9fa';
+                bingoArr[i][j] = 0;
             }
         });
 
         return participantsSelect;
+    }
+
+    function checkBingo(bingoArr, x, y) {
+        const size = bingoArr[0].length;
+
+        // 横チェック
+        if (bingoArr[x].every(val => val === 1)) {
+            return true;
+        }
+
+        // 縦チェック
+        let flag = true;
+        for (let i = 0; i < size; i++) {
+            if (bingoArr[i][y] === 0) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            return true;
+        }
+
+        // 斜めチェック1
+        if (x === y) {
+            for (let i = 0, j = 0; i < size && j < size; i++, j++) {
+                if (bingoArr[i][j] === 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // 斜めチェック2
+        if (x === size - y - 1) {
+            for (let i = 0, j = size - 1; i < size && j >= 0; i++, j--) {
+                if (bingoArr[i][j] === 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return false;
     }
 })
