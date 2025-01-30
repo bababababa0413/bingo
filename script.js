@@ -95,9 +95,11 @@ window.addEventListener('DOMContentLoaded', function () {
      * @param {*} size ビンゴシートの大きさ
      * @param {*} min シートの値の下限値
      * @param {*} max シートの値の上限値
+     * @param {*} permitDuplicate 重複を許すか(true/false)
+     * @param {*} participants 参加者の名前が入った配列
      */
     function createBingoSheet(table, size, min, max, permitDuplicate, participants) {
-        // ビンゴシートの各マスがあけられているかを表す配列
+        // ビンゴシートの各マスがあけられているかを表す配列を用意
         // 0→あいてない　1→あいてる
         const bingoArr = new Array(size);
         for (let i = 0; i < size; i++) {
@@ -173,6 +175,9 @@ window.addEventListener('DOMContentLoaded', function () {
     /**     
      * あけた人の名前入力部分をプルダウンリストで作成する関数
      * @param {*} participants 参加者の名前が入った配列
+     * @param {*} i 現在作っているマスの縦の位置
+     * @param {*} j 現在作っているマスの横の位置
+     * @param {*} bingoArr ビンゴシートの各マスがあけられているかを表す配列
      * @returns あけた人の名前入力を選択するプルダウンリスト
      */
     function createParticipantsSelect(participants, i, j, bingoArr) {
@@ -220,18 +225,25 @@ window.addEventListener('DOMContentLoaded', function () {
         return participantsSelect;
     }
 
-    function checkBingo(bingoArr, x, y) {
+    /**
+     * ビンゴがそろっているかチェックする配列
+     * @param {*} bingoArr ビンゴシートの各マスがあけられているかを表す配列
+     * @param {*} y あけられたマスの縦の位置
+     * @param {*} x あけられたマスの横の位置
+     * @returns ビンゴがそろっているか(true/false)
+     */
+    function checkBingo(bingoArr, y, x) {
         const size = bingoArr[0].length;
 
         // 横チェック
-        if (bingoArr[x].every(val => val === 1)) {
+        if (bingoArr[y].every(val => val === 1)) {
             return true;
         }
 
         // 縦チェック
         let flag = true;
         for (let i = 0; i < size; i++) {
-            if (bingoArr[i][y] === 0) {
+            if (bingoArr[i][x] === 0) {
                 flag = false;
                 break;
             }
@@ -241,7 +253,7 @@ window.addEventListener('DOMContentLoaded', function () {
         }
 
         // 斜めチェック1
-        if (x === y) {
+        if (y === x) {
             for (let i = 0, j = 0; i < size && j < size; i++, j++) {
                 if (bingoArr[i][j] === 0) {
                     return false;
@@ -251,7 +263,7 @@ window.addEventListener('DOMContentLoaded', function () {
         }
 
         // 斜めチェック2
-        if (x === size - y - 1) {
+        if (y === size - x - 1) {
             for (let i = 0, j = size - 1; i < size && j >= 0; i++, j--) {
                 if (bingoArr[i][j] === 0) {
                     return false;
