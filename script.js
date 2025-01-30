@@ -1,3 +1,19 @@
+const conditions =
+    [
+        'a',
+        'b',
+        'c',
+        'd',
+        'e',
+        'f',
+        'g',
+        'h',
+        'i',
+        'j',
+        'k',
+        'l'
+    ];
+
 window.addEventListener('DOMContentLoaded', function () {
     const deleteButtons = document.querySelectorAll('.delete');
 
@@ -127,9 +143,15 @@ window.addEventListener('DOMContentLoaded', function () {
                 div.className = 'cell-content';
 
                 // 数字部分
-                const span = document.createElement('span');
-                span.innerText = randomNumbersIterator.next().value;
-                div.append(span);
+                const score = document.createElement('span');
+                score.className = 'score';
+                score.innerText = randomNumbersIterator.next().value;
+                div.append(score);
+
+                const condition = document.createElement('span');
+                condition.className = 'condition';
+                condition.innerText = conditions[randomNum(0, conditions.length - 1)];
+                div.append(condition);
 
                 // あけた名前入力部分を作成
                 const participantsSelect = createParticipantsSelect(participants, i, j, bingoArr);
@@ -155,7 +177,7 @@ window.addEventListener('DOMContentLoaded', function () {
             const randomArray = new Array();
 
             while (randomArray.length < size * size) {
-                const num = Math.floor(Math.random() * (max - min + 1)) + min;
+                const num = randomNum(min, max);
                 randomArray.push(num);
             }
 
@@ -170,6 +192,16 @@ window.addEventListener('DOMContentLoaded', function () {
         }
 
         return Array.from(randomSet);
+    }
+
+    /**
+     * 決められた範囲内の乱数を生成する関数
+     * @param {*} min 最小値
+     * @param {*} max 最大値
+     * @returns 乱数
+     */
+    function randomNum(min, max){
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     /**     
@@ -210,7 +242,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 if (isCompleteBingo) {
                     const overlay = document.getElementById("overlay");
                     overlay.classList.add("show");
-                
+
                     // 5秒後にフェードアウト
                     setTimeout(() => {
                         overlay.classList.remove("show");
@@ -274,4 +306,4 @@ window.addEventListener('DOMContentLoaded', function () {
 
         return false;
     }
-})
+});

@@ -192,8 +192,8 @@ h1 {
 
 #bingo td {
     border: 1px solid #ddd; /* セルの境界線を淡い色に */
-    width: 100px;
-    height: 100px;
+    width: 130px;
+    height: 130px;
     text-align: center;
     padding: 0;
     background-color: #f8f9fa; /* 背景色を柔らかく */
@@ -213,11 +213,19 @@ h1 {
     width: 100%;
 }
 
-.cell-content span {
-    font-size: 1.5em;
+.cell-content .score {
+    font-size: 2em;
     margin-bottom: 5px;
     font-weight: bold;
     color: #2c3e50;
+}
+
+.cell-content .condition {
+    width: 80%;
+    height: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-align: center;
 }
 
 .cell-content select {
