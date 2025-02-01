@@ -1,4 +1,4 @@
-let conditions =
+const conditions =
     [
         // アーティスト
         'ミセス',
@@ -75,6 +75,8 @@ window.addEventListener('DOMContentLoaded', function () {
             permitDuplicate = false;
         }
 
+        const noConditionRate = parseInt(document.getElementById('no-condition-rate').value);
+
         const participantsElements = document.querySelectorAll('.participant');
         const participants = Array.from(participantsElements).map(participantsElements => participantsElements.value.trim());
 
@@ -99,6 +101,10 @@ window.addEventListener('DOMContentLoaded', function () {
             alert('設定した点数の範囲では、埋めれないセルがあります。');
             return;
         }
+        if (noConditionRate < 0 || noConditionRate > 100 || isNaN(noConditionRate)) {
+            alert('縛りなしの割合が不正です。');
+            return;
+        }
         if (participants.includes('')) {
             alert('参加者を設定してください。');
             return;
@@ -106,7 +112,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
         // ビンゴシート生成
         const table = document.getElementById('bingo');
-        createBingoSheet(table, size, rangeMin, rangeMax, permitDuplicate, participants);
+        createBingoSheet(table, size, rangeMin, rangeMax, permitDuplicate, noConditionRate, participants);
 
     });
 
@@ -119,7 +125,7 @@ window.addEventListener('DOMContentLoaded', function () {
      * @param {*} permitDuplicate 重複を許すか(true/false)
      * @param {*} participants 参加者の名前が入った配列
      */
-    function createBingoSheet(table, size, min, max, permitDuplicate, participants) {
+    function createBingoSheet(table, size, min, max, permitDuplicate, noConditionRate, participants) {
         // ビンゴシートの各マスがあけられているかを表す配列を用意
         // 0→あいてない　1→あいてる
         const bingoArr = new Array(size);
@@ -138,6 +144,11 @@ window.addEventListener('DOMContentLoaded', function () {
         // イテレータ作成
         const randomNumbersIterator = randomNumbers[Symbol.iterator]();
 
+        const randomConditions = new Array(Math.trunc(size * size * noConditionRate / 10)).fill('');
+        for (let i = randomConditions.length; i < size * size; i++) {
+            randomConditions.push(conditions[randomNum(0, conditions.length - 1)]);
+        }
+
         // 指定されたサイズのビンゴシートを生成 
         for (let i = 0; i < size; i++) {
             const tr = document.createElement('tr');
@@ -155,7 +166,8 @@ window.addEventListener('DOMContentLoaded', function () {
 
                 const condition = document.createElement('span');
                 condition.className = 'condition';
-                condition.innerText = conditions[randomNum(0, conditions.length - 1)];
+                condition.innerText = popRandomElement(randomConditions);
+
                 div.append(condition);
 
                 // あけた名前入力部分を作成
@@ -205,8 +217,14 @@ window.addEventListener('DOMContentLoaded', function () {
      * @param {*} max 最大値
      * @returns 乱数
      */
-    function randomNum(min, max){
+    function randomNum(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function popRandomElement(arr) {
+        if (arr.length === 0) return null; // 配列が空ならnullを返す
+        let index = Math.floor(Math.random() * arr.length);
+        return arr.splice(index, 1)[0]; // ランダムな要素を取り出し、削除
     }
 
     /**     
