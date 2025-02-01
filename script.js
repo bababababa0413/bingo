@@ -1,17 +1,22 @@
-const conditions =
+let conditions =
     [
-        'a',
-        'b',
-        'c',
-        'd',
-        'e',
-        'f',
-        'g',
-        'h',
-        'i',
-        'j',
-        'k',
-        'l'
+        // アーティスト
+        'ミセス',
+        'ヨルシカ',
+        '髭男',
+        'まふまふ',
+        // ジャンル
+        'JPOP',
+        'ボカロ',
+        'アニソン',
+        'Vtuber',
+        '平成ソング',
+        '合唱',
+        // 最高音
+        'hiA~C',
+        'hiC#~E',
+        'hiF~G#',
+        'hihi域'
     ];
 
 window.addEventListener('DOMContentLoaded', function () {
