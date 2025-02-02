@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // それぞれ押されたときに実行する処理を設定
     for (let i = 0; i < deleteButtons.length; i++) {
-        deleteButtons[i].addEventListener('click', handleDeleteButton(e));
+        deleteButtons[i].addEventListener('click', handleDeleteButton);
     }
 
     // 参加者追加ボタン
@@ -45,7 +45,7 @@ window.addEventListener('DOMContentLoaded', function () {
         div.querySelector('.participant').value = '';
         // 削除ボタンに処理を設定
         const button = div.querySelector('.delete');
-        button.addEventListener('click', handleDeleteButton(e));
+        button.addEventListener('click', handleDeleteButton);
 
         participantsTd.append(div);
 
