@@ -21,40 +21,49 @@ const conditions =
     ];
 
 window.addEventListener('DOMContentLoaded', function () {
+    // すべての参加者削除ボタン
     const deleteButtons = document.querySelectorAll('.delete');
 
+    // それぞれ押されたときに実行する処理を設定
     for (let i = 0; i < deleteButtons.length; i++) {
-        // 参加者の削除ボタンが押されたときの処理
-        deleteButtons[i].addEventListener('click', function (e) {
-            const numberOfButtons = document.querySelectorAll('.delete').length;
-            if (numberOfButtons !== 1) {
-                e.target.parentElement.remove();
-            }
-        });
+        deleteButtons[i].addEventListener('click', handleDeleteButton(e));
     }
 
+    // 参加者追加ボタン
     const plusButton = document.getElementById('plus');
 
     // 参加者追加ボタンが押されたときの処理
     plusButton.addEventListener('click', function (e) {
+        // 一旦追加ボタンを削除
         e.target.remove();
 
         const participantsTd = document.getElementById('participants');
 
+        // 存在する参加者入力欄のクローンを生成
         const div = document.querySelector('#participants div').cloneNode(true);
-
+        // 入力欄は空文字で初期化
         div.querySelector('.participant').value = '';
+        // 削除ボタンに処理を設定
         const button = div.querySelector('.delete');
-        button.addEventListener('click', function (e) {
-            const numberOfButtons = document.querySelectorAll('.delete').length;
-            if (numberOfButtons !== 1) {
-                e.target.parentElement.remove();
-            }
-        });
+        button.addEventListener('click', handleDeleteButton(e));
 
         participantsTd.append(div);
+
+        // 最下部に追加ボタンを入れる
         participantsTd.append(e.target);
     })
+
+    /**
+     * 参加者削除ボタンが押されたときに実行する関数
+     * 押されたボタンに対応する参加者入力欄を削除
+     * @param {*} e イベント
+     */
+    function handleDeleteButton(e) {
+        const amountDeleteButton = document.querySelectorAll('.delete').length;
+        if (amountDeleteButton !== 1) {
+            e.target.parentElement.remove();
+        }
+    }
 
     const createButton = document.getElementById('create-button');
 
@@ -64,6 +73,7 @@ window.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // 入力値を取得
         const size = parseInt(document.getElementById('size').value);
 
         const rangeMin = parseInt(document.getElementById('range-min').value);
@@ -71,6 +81,7 @@ window.addEventListener('DOMContentLoaded', function () {
         const rangeMax = parseInt(document.getElementById('range-max').value);
 
         const duplicateValue = document.querySelector('input[name="duplicate-column"]:checked').value;
+        // 重複の有無をbooleanで表す
         let permitDuplicate = true;
         if (duplicateValue === 'no-duplicate') {
             permitDuplicate = false;
@@ -79,6 +90,7 @@ window.addEventListener('DOMContentLoaded', function () {
         const noConditionRate = parseInt(document.getElementById('no-condition-rate').value);
 
         const participantsElements = document.querySelectorAll('.participant');
+        // 入浴された参加者の名前を配列に変換
         const participants = Array.from(participantsElements).map(participantsElements => participantsElements.value.trim());
 
         // 入力値チェック
@@ -167,8 +179,10 @@ window.addEventListener('DOMContentLoaded', function () {
                 score.innerText = randomNumbersIterator.next().value;
                 div.append(score);
 
+                // 条件部分
                 const condition = document.createElement('span');
                 condition.className = 'condition';
+
                 // 縛り条件を格納した配列からランダムに条件を取り出す
                 condition.innerText = popRandomElement(randomConditions);
 
@@ -194,6 +208,7 @@ window.addEventListener('DOMContentLoaded', function () {
      * @returns ビンゴシートに入れる値を格納した配列
      */
     function createRandomArray(size, min, max, permitDuplicate) {
+        // 重複ありの場合は、そのまま配列に乱数を格納して返す
         if (permitDuplicate) {
             const randomArray = new Array();
 
@@ -205,10 +220,11 @@ window.addEventListener('DOMContentLoaded', function () {
             return randomArray;
         }
 
+        // 重複なしの場合は、セットに乱数を格納して、配列に変換して返す
         const randomSet = new Set();
 
         while (randomSet.size < size * size) {
-            const num = Math.floor(Math.random() * (max - min + 1)) + min;
+            const num = randomNum(min, max);
             randomSet.add(num);
         }
 
@@ -231,9 +247,11 @@ window.addEventListener('DOMContentLoaded', function () {
      * @returns ランダムに取り出した値
      */
     function popRandomElement(arr) {
-        if (arr.length === 0) return null; // 配列が空ならnullを返す
+        // 配列が空ならnullを返す
+        if (arr.length === 0) return null; 
         let index = Math.floor(Math.random() * arr.length);
-        return arr.splice(index, 1)[0]; // ランダムな要素を取り出し、削除
+        // ランダムな要素を取り出し、削除
+        return arr.splice(index, 1)[0]; 
     }
 
     /**     
@@ -245,15 +263,16 @@ window.addEventListener('DOMContentLoaded', function () {
      * @returns あけた人の名前入力を選択するプルダウンリスト
      */
     function createParticipantsSelect(participants, i, j, bingoArr) {
-        // あけた人の名前入力部分
+        // あけた人の名前選択部分
         const participantsSelect = document.createElement('select');
         participantsSelect.class = 'participants-select';
 
+        // 空文字の選択欄(誰もあけてない状態)を一つだけ追加
         const option = document.createElement('option');
         option.value = '';
-
         participantsSelect.append(option);
 
+        // 参加者の名前をすべて追加
         for (let i = 0; i < participants.length; i++) {
             const option = document.createElement('option');
             option.innerText = participants[i];
@@ -261,16 +280,22 @@ window.addEventListener('DOMContentLoaded', function () {
             participantsSelect.append(option);
         }
 
-        // 名前が入力されたらあいたと判定し、背景色を変更
+        // プルダウンリストが変更されたら実行される処理
+        // 名前が入力されたらあいたと判定し、背景色を変更し、ビンゴが揃ったから調べる
         participantsSelect.addEventListener('change', function (e) {
+            // プルダウンリストで選択されたオプション
             const input = e.target.value.trim();
 
+            // マスあけられた場合
             if (input !== '') {
+                // 背景色を変更し、マスがあいた状態に保存
                 e.target.parentElement.parentElement.style.backgroundColor = '#F0B9B9';
                 bingoArr[i][j] = 1;
 
+                // ビンゴが揃ったかどうか調べる
                 isCompleteBingo = checkBingo(bingoArr, i, j);
 
+                // 揃ってたらアニメーションを表示
                 if (isCompleteBingo) {
                     const overlay = document.getElementById("overlay");
                     overlay.classList.add("show");
