@@ -169,6 +169,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
                 const condition = document.createElement('span');
                 condition.className = 'condition';
+
                 // 縛り条件を格納した配列からランダムに条件を取り出す
                 condition.innerText = popRandomElement(randomConditions);
 
