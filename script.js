@@ -11,8 +11,6 @@ const conditions =
         'ボカロ',
         'アニソン',
         'Vtuber',
-        '平成ソング',
-        '合唱',
         // 最高音
         'hiA~C',
         'hiC#~E',
